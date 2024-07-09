@@ -9,7 +9,8 @@
 //    return; 
 // }
 
-let numeroSecreto = generarNumeroSecreto();
+let numeroSecreto;
+let intentos;
 
 function asignarTextoElemento (elemento, texto){
     let elementoHTML = document.querySelector(elemento); 
@@ -17,13 +18,38 @@ function asignarTextoElemento (elemento, texto){
     return; // no es necesario, pero es buena practica
 }
 
+function condicionesIniciales(){
+    asignarTextoElemento ("h1", "Juego de numero secreto");
+    asignarTextoElemento ("p", "Escoge un numero de 1 al 10");
+    numeroSecreto = generarNumeroSecreto();
+    intentos = 1;
+}
+
 function verificarIntento() {
-    let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value); // es como queryselector pero usa el id. valorUsuario es un id de la etiqueta input
-    console.log(typeof(numeroDeUsuario));
-    console.log(numeroSecreto);
-    console.log(numeroDeUsuario);
-    console.log(numeroDeUsuario == numeroSecreto); // da un booleano
+    let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value); // es como queryselector pero usa el id. valorUsuario es un id de la etiqueta "input"
+    console.log(intentos);
+    
+
+    if (numeroDeUsuario == numeroSecreto){
+        // el usuario acierta
+        asignarTextoElemento("p", `Acertaste en ${intentos} ${(intentos ===1) ? "intento":"intentos"}`);
+        document.getElementById("reiniciar").removeAttribute("disabled");    
+    } else {
+        // el usuario no acerto
+        if (numeroDeUsuario > numeroSecreto){
+            asignarTextoElemento("p", "Numero secreto es menor");
+        } else {
+            asignarTextoElemento("p", "Numero secreto es mayor");
+        }
+        intentos++;
+        limpiarCaja();
+    }
     return; 
+}
+
+function limpiarCaja(){
+    let valorCaja = document.querySelector('#valorUsuario'); // el numero indica que queremos usar un id para llamar a la etiqueta 'input'. Parecido a getElementById
+    valorCaja.value = "";
 }
 
 function generarNumeroSecreto(){
@@ -31,5 +57,13 @@ function generarNumeroSecreto(){
 
 }
 
-asignarTextoElemento ("h1", "Juego de numero secreto");
-asignarTextoElemento ("p", "Escoge un numero de 1 al 10");
+
+function reiniciarJuego(){
+    limpiarCaja();
+    condicionesIniciales();
+    document.querySelector("#reiniciar").setAttribute("disabled", "true")
+
+}
+
+condicionesIniciales();
+console.log(numeroSecreto);
