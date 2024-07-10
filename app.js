@@ -11,6 +11,8 @@
 
 let numeroSecreto;
 let intentos;
+let listaNumerosSorteados = [];
+let numeroMaximo = 10;
 
 function asignarTextoElemento (elemento, texto){
     let elementoHTML = document.querySelector(elemento); 
@@ -20,9 +22,36 @@ function asignarTextoElemento (elemento, texto){
 
 function condicionesIniciales(){
     asignarTextoElemento ("h1", "Juego de numero secreto");
-    asignarTextoElemento ("p", "Escoge un numero de 1 al 10");
+    asignarTextoElemento ("p", `Escoge un numero de 1 al ${numeroMaximo}`);
     numeroSecreto = generarNumeroSecreto();
     intentos = 1;
+}
+
+function generarNumeroSecreto(){
+    let numeroGenerado = Math.floor(Math.random()*numeroMaximo)+1;
+    console.log(numeroGenerado);
+    console.log(listaNumerosSorteados);
+
+    if (listaNumerosSorteados.length == numeroMaximo){
+        asignarTextoElemento("p", "Ya se sortearon todos los numeros posibles")     
+    } else {
+
+        if (listaNumerosSorteados.includes(numeroGenerado)){
+            return generarNumeroSecreto(); // recursividad
+        } else {
+            listaNumerosSorteados.push(numeroGenerado);
+            return numeroGenerado;
+        }
+    }
+
+ 
+
+
+}
+
+function limpiarCaja(){
+    let valorCaja = document.querySelector('#valorUsuario'); // el numero indica que queremos usar un id para llamar a la etiqueta 'input'. Parecido a getElementById
+    valorCaja.value = "";
 }
 
 function verificarIntento() {
@@ -46,17 +75,6 @@ function verificarIntento() {
     }
     return; 
 }
-
-function limpiarCaja(){
-    let valorCaja = document.querySelector('#valorUsuario'); // el numero indica que queremos usar un id para llamar a la etiqueta 'input'. Parecido a getElementById
-    valorCaja.value = "";
-}
-
-function generarNumeroSecreto(){
-    return Math.floor(Math.random()*10)+1;
-
-}
-
 
 function reiniciarJuego(){
     limpiarCaja();
